@@ -1,3 +1,4 @@
+ 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
     final CollectionReference donar = FirebaseFirestore.instance.collection('donar');
 
+    void deleteDonar(docId){
+      donar.doc(docId).delete();
+
+    }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,12 +29,14 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(onPressed: (){
         Navigator.pushNamed(context, '/add');
       },
-      backgroundColor: Colors.red,
-      child: Icon(Icons.add,size: 40,),
+      backgroundColor: const Color.fromARGB(255, 247, 245, 245),
+      child: Icon(Icons.add,
+      color: Colors.red ,
+      size: 40,),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop ,
 
-      body: StreamBuilder(stream: donar.snapshots(),
+      body: StreamBuilder(stream: donar.orderBy('name').snapshots(),
        builder: (context,snanapshot){
 
 if(snanapshot.hasData){
@@ -75,12 +83,23 @@ if(snanapshot.hasData){
                ),
                Row(
                 children: [
-                  IconButton(onPressed: (){},
+                  IconButton(onPressed: (){
+                    Navigator.pushNamed(context, '/update',
+                    arguments: {
+                      'name': donarsnap['name'],
+                      'phone': donarsnap['phone'].toString(),
+                      'group': donarsnap['group'],
+                      'id': donarsnap.id,
+                    }
+                    );
+                  },
                    icon:Icon(Icons.edit),
                   iconSize: 30,
                   color: Colors.blue,
                   ),
-                  IconButton(onPressed: (){},
+                  IconButton(onPressed: (){
+                    deleteDonar(donarsnap.id);
+                  },
                    icon:Icon(Icons.delete),
                   iconSize: 30,
                   color: Color.fromARGB(255, 219, 40, 8),

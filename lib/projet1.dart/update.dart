@@ -4,14 +4,14 @@ import 'package:firebase_core/firebase_core.dart';
 
 
 
-class AddUser extends StatefulWidget {
-  const AddUser({super.key});
+class UpdateUser extends StatefulWidget {
+  const UpdateUser({super.key});
 
   @override
-  State<AddUser> createState() => _AddUserState();
+  State<UpdateUser> createState() => _UpdateUserState();
 }
 
-class _AddUserState extends State<AddUser> {
+class _UpdateUserState extends State<UpdateUser> {
 
   final  bloodGroups = ['A+','A-','B+','B-','O+','O-','AB+','AB-'];
   String ? selectedbloodgroups;
@@ -20,20 +20,29 @@ class _AddUserState extends State<AddUser> {
       TextEditingController donarname = TextEditingController();
       TextEditingController donarphone = TextEditingController();
 
-void addDonar(){
-  final data = {    
-    'name': donarname.text,
-    'phone' :donarphone.text,
-    'group' :selectedbloodgroups
-  } ;
-  donar.add(data);
-}
+      void UpdateUser(docId){
+        final data = {
+          'name':donarname.text,
+          'phone':donarphone.text,
+          'group':selectedbloodgroups,
+          
+        };
+        donar.doc(docId).update(data).then((value) => Navigator.pop(context));
+
+      }
+
+
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    donarname.text = args['name'];
+    donarphone.text = args['phone'];
+    selectedbloodgroups = args['group'];
+    final dovId = args['id'];
     return Scaffold(
        appBar: AppBar(
-        title: Text(' Add Donors'),
-        backgroundColor: Color.fromARGB(255, 54, 231, 244), 
+        title: Text(' Update user'),
+        backgroundColor: Color.fromARGB(255, 54, 244, 117), 
       ),
       
       body: Padding(
@@ -67,6 +76,8 @@ void addDonar(){
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: DropdownButtonFormField(
+                    value: selectedbloodgroups,
+
                     decoration: InputDecoration(
                       label: Text('select Blood groups'),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))
@@ -79,14 +90,13 @@ void addDonar(){
                     }),
                 ),
                 ElevatedButton(onPressed: (){
-                  addDonar();
-                  Navigator.pop(context); 
+                  UpdateUser(dovId);
                 },
                 style: ButtonStyle(
                   minimumSize: MaterialStateProperty.all(Size(double.infinity, 50)),
                   backgroundColor: MaterialStateProperty.all(Colors.red)
                 ),
-                 child: Text('submit',style: TextStyle(fontSize: 30),)),
+                 child: Text('update',style: TextStyle(fontSize: 30),)),
           ],
         ),
       ),
