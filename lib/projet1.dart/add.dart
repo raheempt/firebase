@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 
 
@@ -69,7 +68,7 @@ void addDonar(){
                   child: DropdownButtonFormField(
                     decoration: InputDecoration(
                       label: Text('select Blood groups'),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20))
                     ),
                     items: bloodGroups.map((e) =>  DropdownMenuItem(
                     child: Text(e),
@@ -78,15 +77,18 @@ void addDonar(){
                       selectedbloodgroups = val;
                     }),
                 ),
-                ElevatedButton(onPressed: (){
-                  addDonar();
-                  Navigator.pop(context); 
-                },
-                style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(Size(double.infinity, 50)),
-                  backgroundColor: MaterialStateProperty.all(Colors.red)
+                Padding(
+                  padding: const EdgeInsets.all(50.0),
+                  child: ElevatedButton(onPressed: (){
+                    addDonar();
+                    Navigator.pop(context); 
+                  },
+                  style: ButtonStyle(
+                    minimumSize: MaterialStateProperty.all(Size(double.infinity, 50)),
+                    backgroundColor: MaterialStateProperty.all(Colors.red)
+                  ),
+                   child: Text('submit',style: TextStyle(fontSize: 30),)),
                 ),
-                 child: Text('submit',style: TextStyle(fontSize: 30),)),
           ],
         ),
       ),
